@@ -15,7 +15,8 @@ class IDatabaseConnection
 {
 public:
     virtual ~IDatabaseConnection() = default;
-    virtual void excute(const std::string &query, const std::string &errorMsg) = 0;
+    virtual void query(const std::string &query) = 0;
+    virtual void transaction(const std::string &query) = 0;
     virtual SQLite::Database getConnection() = 0;
 };
 

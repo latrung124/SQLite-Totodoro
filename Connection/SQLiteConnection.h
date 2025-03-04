@@ -14,13 +14,16 @@ class SQLiteConnection : public IDatabaseConnection
 {
 public:
     SQLiteConnection(const std::string &dbName);
+    SQLiteConnection() = delete;
     ~SQLiteConnection() override = default;
 
-    void excute(const std::string &query, const std::string &errorMsg) override;
+    void query(const std::string &query) override;
+    void transaction(const std::string &query) override;
     SQLite::Database getConnection() override;
 
 private:
     SQLite::Database m_db; //db connection
+    std::string m_dbName; //db name
 };
 
 #endif // SQLITECONNECTION_H

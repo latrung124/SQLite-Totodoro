@@ -16,7 +16,8 @@
 class UserRepository : public IUserRepository
 {
 public:
-    UserRepository(const std::shared_ptr<IDatabaseConnection> &connection);
+    explicit UserRepository(const std::shared_ptr<IDatabaseConnection> &connection);
+    UserRepository() = default;
     ~UserRepository() override = default;
 
     void createTable() override;
@@ -29,7 +30,7 @@ public:
     std::optional<User> findByEmail(const std::string& email) override;
 
 private:
-    std::shared_ptr<IDatabaseConnection> m_connection;
+    std::weak_ptr<IDatabaseConnection> m_connection;
 };
 
 #endif // USERREPOSITORY_H

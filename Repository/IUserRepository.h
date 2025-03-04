@@ -12,7 +12,7 @@
 #include <optional>
 #include <string>
 
-class User;
+#include "DataStructure/User.h"
 
 class IUserRepository
 {

@@ -14,6 +14,22 @@ UserRepository::UserRepository(const std::shared_ptr<IDatabaseConnection> &conne
 
 void UserRepository::createTable()
 {
+    const std::string sql = 
+            "CREATE TABLE IF NOT EXISTS Users ("
+            "user_id TEXT PRIMARY KEY, "
+            "email TEXT UNIQUE, "
+            "username TEXT UNIQUE NOT NULL, "
+            "created_at TEXT DEFAULT CURRENT_TIMESTAMP, "
+            "updated_at TEXT DEFAULT CURRENT_TIMESTAMP"
+            ")";
+
+    auto const connection = m_connection.lock();
+    if (!connection)
+    {
+        return;
+    }
+
+    connection->transaction(sql);
 }
 
 void UserRepository::insert(const User &user)

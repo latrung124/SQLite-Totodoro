@@ -4,6 +4,8 @@ project(sqlite-example)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+add_definitions(-DSOURCE_DIR="${CMAKE_SOURCE_DIR}/Database")
+
 set(SOURCES
     Connection/IDatabaseConnection.h
     Connection/SQLiteConnection.cpp
