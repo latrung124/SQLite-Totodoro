@@ -17,7 +17,7 @@ public:
     virtual ~IDatabaseConnection() = default;
     virtual void query(const std::string &query) = 0;
     virtual void transaction(const std::string &query) = 0;
-    virtual SQLite::Database getConnection() = 0;
+    virtual SQLite::Database* getConnection() = 0;
 };
 
 #endif // IDATABASECONNECTION_H

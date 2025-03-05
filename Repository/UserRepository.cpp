@@ -14,6 +14,12 @@ UserRepository::UserRepository(const std::shared_ptr<IDatabaseConnection> &conne
 
 void UserRepository::createTable()
 {
+    auto const connection = m_connection.lock();
+    if (!connection)
+    {
+        return;
+    }
+
     const std::string sql = 
             "CREATE TABLE IF NOT EXISTS Users ("
             "user_id TEXT PRIMARY KEY, "
@@ -23,6 +29,17 @@ void UserRepository::createTable()
             "updated_at TEXT DEFAULT CURRENT_TIMESTAMP"
             ")";
 
+    connection->transaction(sql);
+}
+
+void UserRepository::insert(const User &user)
+{
+    const std::string sql =
+            "INSERT INTO Users (user_id, email, username, created_at, updated_at) "
+            "VALUES ('" + user.getUserId() + "', '" + user.getEmail() + "', '"
+            + user.getUserName() + "', '" + user.getCreateAt() + "', '"
+            + user.getUpdateAt() + "')";
+    
     auto const connection = m_connection.lock();
     if (!connection)
     {
@@ -30,10 +47,6 @@ void UserRepository::createTable()
     }
 
     connection->transaction(sql);
-}
-
-void UserRepository::insert(const User &user)
-{
 }
 
 void UserRepository::update(const User &user)
@@ -51,6 +64,19 @@ std::vector<User> UserRepository::getAll()
 
 std::optional<User> UserRepository::findById(const std::string &userId)
 {
+    const std::string sql = "SELECT * FROM Users WHERE user_id = '" + userId + "'";
+    auto const connection = m_connection.lock();
+    if (!connection)
+    {
+        return std::nullopt;
+    }
+
+    SQLite::Statement query(*connection->getConnection(), sql);
+    if (query.executeStep())
+    {
+        return User(query.getColumn(0).getText(), query.getColumn(1).getText(), query.getColumn(2).getText(), query.getColumn(3).getText(), query.getColumn(4).getText());
+    }
+
     return std::nullopt;
 }
 

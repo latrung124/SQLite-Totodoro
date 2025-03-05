@@ -52,6 +52,17 @@ int main() {
         std::shared_ptr<IDatabaseConnection> connection = std::make_shared<SQLiteConnection>(path);
         UserRepository userRepository(connection);
         userRepository.createTable();
+        std::cout << "Table created" << std::endl;
+        userRepository.insert(User("1", "latrung@corsair.com", "latrung", "2025-03-03", "2025-03-03"));
+        std::cout << "User inserted" << std::endl;
+        const auto userOpt = userRepository.findById("1");
+        if (!userOpt.has_value()) {
+            throw std::runtime_error("User not found");
+        }
+        const auto user = userOpt.value();
+        std::cout << "User found" << std::endl;
+        std::cout << "User id: " << user.getUserId() << std::endl;
+        std::cout << "User name: " << user.getUserName() << std::endl;
     } catch (std::exception &e) {
         std::cout << e.what() << std::endl;
     }

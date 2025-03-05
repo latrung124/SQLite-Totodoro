@@ -16,6 +16,7 @@ set(SOURCES
     Repository/UserRepository.h
 
     DataStructure/User.h
+    DataStructure/User.cpp
 
     main.cpp
 )

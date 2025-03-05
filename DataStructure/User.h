@@ -13,17 +13,18 @@
 class User
 {
 public:
-    User(const std::string &userId, const std::string &userName,
+    User(const std::string &userId, const std::string &userName, const std::string &email,
      const std::string &createAt, const std::string &updateAt) noexcept;
     
     explicit User(const std::string &username, std::string &email) noexcept;
 
     ~User() = default;
 
-    [[nodiscard]] std::string getUserId() const noexcept;
-    [[nodiscard]] std::string getUserName() const noexcept;
-    [[nodiscard]] std::string getCreateAt() const noexcept;
-    [[nodiscard]] std::string getUpdateAt() const noexcept;
+    std::string getUserId() const noexcept;
+    std::string getUserName() const noexcept;
+    std::string getEmail() const noexcept;
+    std::string getCreateAt() const noexcept;
+    std::string getUpdateAt() const noexcept;
 
     void setUserName(const std::string &userName);
     void setEmail(const std::string &email);

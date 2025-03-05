@@ -12,14 +12,14 @@
 
 SQLiteConnection::SQLiteConnection(const std::string &dbName)
     : m_dbName(dbName), 
-    m_db(dbName)
+    m_db(std::make_unique<SQLite::Database>(dbName, SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE))
 {
 }
 
 void SQLiteConnection::query(const std::string &query)
 {
     try {
-        m_db.exec(query);
+        m_db->exec(query);
     } catch (std::exception &e) {
         std::cout << e.what() << std::endl;
     }
@@ -28,15 +28,15 @@ void SQLiteConnection::query(const std::string &query)
 void SQLiteConnection::transaction(const std::string &query)
 {
     try {
-        SQLite::Transaction transaction(m_db);
-        m_db.exec(query);
+        SQLite::Transaction transaction(*m_db.get());
+        m_db->exec(query);
         transaction.commit();
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
     }
 }
 
-SQLite::Database SQLiteConnection::getConnection()
+SQLite::Database* SQLiteConnection::getConnection()
 {
-    return std::move(m_db);
+    return m_db.get();
 }
